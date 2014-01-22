@@ -45,11 +45,11 @@ function clean_popup {
     # lesson=$(echo $url | cut -d/ -f7)
     level=$(echo $url | cut -d/ -f6)
     mediatype=$(echo $url | cut -d/ -f5)
-    if [ $mediatype = $filetype ] ; then
-        echo "popupchinese-${level}-${lesson}.$filetype"
-    else
-        echo "popupchinese-${level}-${lesson}-${mediatype}.$filetype"
-    fi
+    # if [ $mediatype = $filetype ] ; then
+    #     echo "popupchinese-${level}-${lesson}.$filetype"
+    # else
+    # fi
+    echo "popupchinese-${level}-${lesson}-${mediatype}.$filetype"
 }
 
 function produce_filename {
@@ -78,6 +78,7 @@ function download {
 
     # Delete any temp file:
     rm -f $logfile
+    touch $logfile
 
     # Create new playlist
     # echo "#Last fetch on $(date +%Y-%m-%d) @ $(date +%r)" > $datadir/latest.m3u
