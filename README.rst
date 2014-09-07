@@ -58,6 +58,8 @@ You can create simple playlists by listing files in a text files with m3u suffix
 
     bash$ ls PopupChinese/*dialogue.mp3 > PopupChinese/dialogue_playlist.m3u
 
+A ``m3u`` playlist is automatically created in each Podcast directory.
+
 Schedule jobs
 -------------
 
