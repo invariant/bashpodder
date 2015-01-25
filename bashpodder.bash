@@ -17,8 +17,10 @@ datadir=$(pwd)
 function main {
     case $1 in
         "download")
-            download temp.log true
+            rm new.log
+            download new.log true
             # Move dynamically created log file to permanent log file:
+            cat new.log > temp.log
             cat podcast.log >> temp.log
             sort temp.log | uniq > podcast.log
             rm temp.log
@@ -86,23 +88,28 @@ function download {
 
     # Read the bp.conf file and wget any file not already in the podcast.log file (if ``download_media`` is true):
     while read podcastfields
+        do
+        podcast=$(echo $podcastfields | cut -d' ' -f1)
+        dname=$(echo $podcastfields | cut -d' ' -f2)
+        file=$(xsltproc parse_enclosure.xsl $podcast 2> /dev/null || wget -q $podcast -O - | tr '\r' '\n' | tr \' \" | sed -n 's/.*url="\([^"]*\)".*/\1/p')
+        mkdir -p $datadir/$dname
+        for url in $file
             do
-            podcast=$(echo $podcastfields | cut -d' ' -f1)
-            dname=$(echo $podcastfields | cut -d' ' -f2)
-            file=$(xsltproc parse_enclosure.xsl $podcast 2> /dev/null || wget -q $podcast -O - | tr '\r' '\n' | tr \' \" | sed -n 's/.*url="\([^"]*\)".*/\1/p')
-            mkdir -p $datadir/$dname
-            for url in $file
-                    do
-                    filename=$(produce_filename $url)
-                    if ! grep "$filename" podcast.log > /dev/null ; then
-                        echo $filename >> $logfile
-                        if $download_media ; then
-                            wget -t 10 -U BashPodder -c -q -O $datadir/$dname/$filename "$url"
-                        fi
-                        #echo $datadir/$dname/$filename >> $datadir/latest.m3u
-                    fi
-                    done
-            done < bp.conf
+            filename=$(produce_filename $url)
+            if ! grep "$filename" podcast.log > /dev/null ; then
+                echo $filename >> $logfile
+                if $download_media ; then
+                    wget -t 10 -U BashPodder -c -q -O $datadir/$dname/$filename "$url"
+                fi
+                #echo $datadir/$dname/$filename >> $datadir/latest.m3u
+            fi
+            done
+        done < bp.conf
+    popup_script=popup_tools/run_all_utilities.sh
+    if [ -f $popup_script ]
+    then
+        bash $popup_script
+    fi
 
 }
 
@@ -110,7 +117,7 @@ function create_playlists {
     while read podcastfields
             do
             dname=$(echo $podcastfields | cut -d' ' -f2)
-            ls $dname/*.mp3 | xargs -n1 | basename > ${dname}/${dname}.m3u
+            ls $dname/*.mp3 | xargs -n1 basename > ${dname}/${dname}.m3u
             done < bp.conf
 }
 
