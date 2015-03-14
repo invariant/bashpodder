@@ -24,7 +24,7 @@ function main {
             cat podcast.log >> temp.log
             sort temp.log | uniq > podcast.log
             rm temp.log
-            create_playlists
+            # create_playlists
             # Create an m3u playlist:
             #ls $datadir | grep -v m3u > $datadir/podcast.m3u
             ;;
