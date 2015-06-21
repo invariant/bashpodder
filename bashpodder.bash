@@ -24,9 +24,6 @@ function main {
             cat podcast.log >> temp.log
             sort temp.log | uniq > podcast.log
             rm temp.log
-            # create_playlists
-            # Create an m3u playlist:
-            #ls $datadir | grep -v m3u > $datadir/podcast.m3u
             ;;
         "test")
             download test.log false
@@ -111,14 +108,6 @@ function download {
         bash $popup_script
     fi
 
-}
-
-function create_playlists {
-    while read podcastfields
-            do
-            dname=$(echo $podcastfields | cut -d' ' -f2)
-            ls $dname/*.mp3 | xargs -n1 basename > ${dname}/${dname}.m3u
-            done < bp.conf
 }
 
 main $@
