@@ -3,6 +3,12 @@
 destdisk="/Volumes/U32"
 otherdisk="/Volumes/CLIP"
 
+newlist="/Users/nick/source/bashpodder/tocopy.log"
+if ! [ -f "$newlist" ]; then
+	echo "Nothing to copy ($newlist)"
+	exit 1
+fi
+
 destdir="${destdisk}/podcasts"
 if ! [ -d "$destdir" ]; then
 	echo "Can't find destination directory ($destdir)"
@@ -15,14 +21,7 @@ if ! [ -d "$srcdir" ]; then
 	exit 1
 fi
 
-newlist="/Users/nick/source/bashpodder/tocopy.log"
-if ! [ -f "$newlist" ]; then
-	echo "No list ($newlist)"
-	exit 1
-fi
+rsync -a -v --remove-source-files --progress --files-from "$newlist" "$srcdir/" "$destdir/"
 
-rsync -a -v --progress --files-from "$newlist" "$srcdir/" "$destdir/"
-mv -vf "$newlist" "$destdir/new.m3u"
-
-diskutil eject $destdisk
-diskutil eject $otherdisk
+#diskutil eject $destdisk
+#diskutil eject $otherdisk
