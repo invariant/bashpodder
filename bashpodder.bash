@@ -65,8 +65,7 @@ function download {
     while read podcastfields
         do
         podcast=$(echo $podcastfields | cut -d' ' -f1)
-        dname=$(echo $podcastfields | cut -d' ' -f2)
-        #file=$(xsltproc parse_enclosure.xsl $podcast 2> /dev/null || curl -v $podcast | tr '\r' '\n' | tr \' \" | sed -n 's/.*url="\([^"]*\)".*/\1/p')
+        dname=$(echo $podcastfields | cut -d' ' -f2)        
         echo "checking $dname..."    
         file=$(curl -s $podcast | xsltproc parse_enclosure.xsl - 2> /dev/null)    
         mkdir -p $datadir/$dname
@@ -77,10 +76,10 @@ function download {
                 echo " new: $filename"                
                 if $download_media ; then
                     echo " downloading: $url"
-                    curl -L --retry 3 -A BashPodder -C - -o "$datadir/$dname/$filename" "$url"
+                    curl -L -R --retry 3 -A BashPodder -C - -o "$datadir/$dname/$filename" "$url"
+                    echo "$dname/$filename" >> "tocopy.log"
                 fi                
-                echo "$dname/$filename" >> $logfile
-                echo "$dname/$filename" >> "tocopy.log"
+                echo "$dname/$filename" >> $logfile            
             fi
             done
         done < bp.conf
