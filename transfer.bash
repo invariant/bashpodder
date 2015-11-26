@@ -1,3 +1,5 @@
+#!/bin/bash
+
 destdisk="/Volumes/U32"
 otherdisk="/Volumes/CLIP"
 
