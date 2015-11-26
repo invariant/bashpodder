@@ -38,7 +38,7 @@ function main {
 }
 
 function usage {
-    echo "Usage: bashpodder.bash download | test | help"
+    echo "Usage: getpodcasts download | test | help"
 }
 
 function produce_filename {
