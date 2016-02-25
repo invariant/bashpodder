@@ -21,7 +21,8 @@ if ! [ -d "$srcdir" ]; then
 	exit 1
 fi
 
-rsync -a -v --remove-source-files --progress --files-from "$newlist" "$srcdir/" "$destdir/"
+rsync -a -v --progress --files-from "$newlist" "$srcdir/" "$destdir/"
+mv -vf "$newlist" "$destdir/new.m3u"
 
 #diskutil eject $destdisk
 #diskutil eject $otherdisk
