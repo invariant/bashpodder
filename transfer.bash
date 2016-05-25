@@ -1,7 +1,7 @@
 #!/bin/bash
 
 destdisk="/Volumes/U32"
-otherdisk="/Volumes/CLIP"
+otherdisk="/Volumes/Clip Jam"
 
 newlist="/Users/nick/source/bashpodder/tocopy.log"
 if ! [ -f "$newlist" ]; then
@@ -22,7 +22,4 @@ if ! [ -d "$srcdir" ]; then
 fi
 
 rsync -a -v --progress --files-from "$newlist" "$srcdir/" "$destdir/"
-mv -vf "$newlist" "$destdir/new.m3u"
-
-#diskutil eject $destdisk
-#diskutil eject $otherdisk
+echo ""  > "$newlist"

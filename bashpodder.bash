@@ -85,6 +85,13 @@ function download {
         done < bp.conf
 
     ./transfer.bash
+    ./eject.bash
+    echo ""
+    echo "New podcasts:"
+    echo ""
+    cat new.log
+    echo ""    
+    echo ""        
 }
 
 main $@
